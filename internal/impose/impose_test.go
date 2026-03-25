@@ -27,6 +27,11 @@ func TestCalculatePageOrder(t *testing.T) {
 			want:       []int{7, 0, 1, 6, 5, 2, 3, 4},
 		},
 		{
+			name:       "10 pages (padded to 12)",
+			totalPages: 10,
+			want:       []int{11, 0, 1, 10, 9, 2, 3, 8, 7, 4, 5, 6},
+		},
+		{
 			name:       "12 pages",
 			totalPages: 12,
 			want:       []int{11, 0, 1, 10, 9, 2, 3, 8, 7, 4, 5, 6},

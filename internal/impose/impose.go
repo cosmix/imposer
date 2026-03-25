@@ -155,8 +155,14 @@ func PDF(inputPath, outputPath string) error {
 
 	pages := ctx.PageCount
 
-	// If we have fewer than MinimumPages pages, we need to add blank pages
-	if pages < MinimumPages {
+	// Calculate the target page count: must be a multiple of 4, and at least MinimumPages
+	targetPages := int(math.Ceil(float64(pages)/4) * 4)
+	if targetPages < MinimumPages {
+		targetPages = MinimumPages
+	}
+
+	// If we need more pages, add blank pages
+	if pages < targetPages {
 		// Create a temporary file for the padded PDF
 		tempDir := filepath.Dir(outputPath)
 		tempFile, err := os.CreateTemp(tempDir, "padded-*.pdf")
@@ -167,14 +173,14 @@ func PDF(inputPath, outputPath string) error {
 		tempFile.Close()
 		defer os.Remove(tempPath)
 
-		// Add blank pages to reach MinimumPages
-		if err := addBlankPages(inputPath, tempPath, MinimumPages); err != nil {
+		// Add blank pages to reach targetPages
+		if err := addBlankPages(inputPath, tempPath, targetPages); err != nil {
 			return fmt.Errorf("adding blank pages: %v", err)
 		}
 
 		// Use the padded file for reordering
 		inputPath = tempPath
-		pages = MinimumPages
+		pages = targetPages
 	}
 
 	pageOrder := CalculatePageOrder(pages)
