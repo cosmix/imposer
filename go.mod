@@ -2,7 +2,7 @@ module github.com/cosmix/imposer
 
 go 1.26.0
 
-require github.com/pdfcpu/pdfcpu v0.16.3
+require github.com/pdfcpu/pdfcpu v0.16.4
 
 require (
 	github.com/clipperhouse/uax29/v2 v2.7.0 // indirect
